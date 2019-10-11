@@ -2,6 +2,10 @@
 
 _Caress Client_ is a JavaScript library that converts [TUIO](http://www.tuio.org) events to native browser touches as proposed by the [W3C Touch Events version 2](http://dvcs.w3.org/hg/webevents/raw-file/tip/touchevents.html).
 
+## Requirements
+
+You should use this library with [caress-server](https://github.com/MadDeveloper/caress-server).
+
 ### Background
 
 Thus far touch events have mainly only been supported on some mobile browsers. Firefox (as of version 4) is an exception in the desktop department and supports a mode where you can enable touch support (however it is a bit of a secret). Chrome's emulation of touch support, frankly just doesn't work.
