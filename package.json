@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "caress-server": "git+https://github.com/MadDeveloper/caress-server.git#v3.0.0",
-    "express": ">=3.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "underscore": "^1.9.1"
   },
   "keywords": [
     "tuio",
@@ -36,7 +36,7 @@
     "multitouch",
     "eventemitter"
   ],
-  "main": "lib/Caress.js",
+  "main": "lib/caress.js",
   "scripts": {
     "start": "hs examples"
   },

@@ -24,7 +24,7 @@ You need to include a few client side libraries in your html file. They are:
 Then just add the code below and start binding regular touch events at will:
 
     <script>
-        const client = new Caress.Client({
+        window.client = new Caress.Client({
             host: 'localhost',
             port: 5000
         });
