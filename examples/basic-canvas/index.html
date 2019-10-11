@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <!-- Basic canvas demo -->
 <!-- Copyright (c) 2012 Eric Kryski -->
@@ -6,134 +6,170 @@
 <!-- Canvas source code adapted from https://developer.mozilla.org/samples/domref/touchevents.html -->
 
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Caress Canvas</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width">
-  <style type="text/css">
-    #canvas {
-      border:solid black 1px;
-    }
-    body {
-      padding: 0;
-      margin: 0;
-    }
-  </style>
-</head>
-<body onload="startup()">
-  <canvas id="canvas" width="1920" height="1080">
-    You really badly need to use a different browser.
-  </canvas>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Caress Canvas</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width" />
+    <style type="text/css">
+      #canvas {
+        border: solid black 1px;
+      }
+      body {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body onload="startup()">
+    <button
+      id="clear"
+      style="position: absolute; top: 10px; left: 10px; width: 200px; height: 50px;"
+    >
+      clear
+    </button>
+    <canvas id="canvas" width="1920" height="1080">
+      You really badly need to use a different browser.
+    </canvas>
 
-  <!-- The Scripts -->
-  <script type="text/javascript" src="../common/js/jquery-1.8.1.min.js"></script>
-  <script type="text/javascript" src="../common/js/underscore-1.3.3.min.js"></script>
-  <script type="text/javascript" src="../common/js/socket.io-0.9.10.min.js"></script>
-  <script type="text/javascript" src="../common/js/caress-0.1.0.js"></script>
-  <script>
-      $(function() {
-          window.client = new Caress.Client({
-              host: 'localhost',
-              port: 5000
-          });
-          client.connect();
-      });
-  </script>
-  <script>
-    var ongoingTouches = new Array;
+    <!-- The Scripts -->
+    <script
+      type="text/javascript"
+      src="../common/js/jquery-3.4.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../common/js/underscore-1.9.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../common/js/socket.io-2.3.0.min.js"
+    ></script>
+    <script type="text/javascript" src="../common/js/caress-0.2.0.js"></script>
+    <script>
+      $(() => {
+        window.client = new Caress.Client({
+          host: "localhost",
+          port: 5000
+        })
+        client.connect()
+      })
 
-    function colorForTouch(touch) {
-      var id = touch.identifier;
+      $(window)
+        .resize(() => {
+          const canvas = document.getElementById("canvas")
 
-      return '#'+Math.floor(Math.random() * 16777215 * id).toString(16);
-    }
+          canvas.width = window.innerWidth
+          canvas.height = window.innerHeight
+        })
+        .resize()
+    </script>
+    <script>
+      const ongoingTouches = []
+      const canvas = document.getElementById("canvas")
+      const context = canvas.getContext("2d")
+      const clearButton = document.getElementById("clear")
+      const config = {
+        lineWidth: 1
+      }
 
-    function ongoingTouchIndexById(idToFind) {
-      for (var i=0; i<ongoingTouches.length; i++) {
-        var id = ongoingTouches[i].identifier;
+      function ongoingTouchIndexById(idToFind) {
+        const ongoinTouchesLength = ongoingTouches.length
 
-        if (id == idToFind) {
-          return i;
+        for (let i = 0; i < ongoinTouchesLength; i++) {
+          const id = ongoingTouches[i].identifier
+
+          if (id == idToFind) {
+            return i
+          }
+        }
+        return -1 // not found
+      }
+
+      function handleStart(evt) {
+        evt.preventDefault()
+
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
+
+        for (let i = 0; i < touchesLength; i++) {
+          context.fillRect(
+            touches[i].pageX - config.lineWidth / 2,
+            touches[i].pageY - config.lineWidth / 2,
+            config.lineWidth,
+            config.lineWidth
+          )
+          ongoingTouches.push(touches[i])
         }
       }
-      return -1;    // not found
-    }
 
-    function handleStart(evt) {
-      evt.preventDefault();
-      var el = document.getElementById("canvas");
-      var ctx = el.getContext("2d");
-      var touches = evt.changedTouches;
+      function handleMove(evt) {
+        evt.preventDefault()
 
-      for (var i=0; i<touches.length; i++) {
-        var color = colorForTouch(touches[i]);
-        ongoingTouches.push(touches[i]);
-        ctx.fillStyle = color;
-        ctx.fillRect(touches[i].pageX-2, touches[i].pageY-2, 4, 4);
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
+
+        context.lineWidth = config.lineWidth
+
+        for (let i = 0; i < touchesLength; i++) {
+          const idx = ongoingTouchIndexById(touches[i].identifier)
+
+          if (!ongoingTouches[idx]) {
+            // touch may has end and has not been started again
+            return
+          }
+
+          context.beginPath()
+          context.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY)
+          context.lineTo(touches[i].pageX, touches[i].pageY)
+          context.closePath()
+          context.stroke()
+          ongoingTouches.splice(idx, 1, touches[i]) // swap in the new touch record
+        }
       }
-    }
 
-    function handleMove(evt) {
-      evt.preventDefault();
-      var el = document.getElementById("canvas");
-      var ctx = el.getContext("2d");
-      var touches = evt.changedTouches;
+      function handleEnd(evt) {
+        evt.preventDefault()
 
-      ctx.lineWidth = 4;
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
 
-      for (var i=0; i<touches.length; i++) {
-        var idx = ongoingTouchIndexById(touches[i].identifier);
+        context.lineWidth = config.lineWidth
 
-        ctx.fillStyle = touches[i].color;
-        ctx.beginPath();
-        ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
-        ctx.lineTo(touches[i].pageX, touches[i].pageY);
-        ctx.closePath();
-        ctx.stroke();
-        ongoingTouches.splice(idx, 1, touches[i]);  // swap in the new touch record
+        for (let i = 0; i < touchesLength; i++) {
+          const idx = ongoingTouchIndexById(touches[i].identifier)
+
+          context.beginPath()
+          context.moveTo(ongoingTouches[i].pageX, ongoingTouches[i].pageY)
+          context.lineTo(touches[i].pageX, touches[i].pageY)
+          ongoingTouches.splice(i, 1) // remove it; we're done
+        }
       }
-    }
 
-    function handleEnd(evt) {
-      evt.preventDefault();
-      var el = document.getElementById("canvas");
-      var ctx = el.getContext("2d");
-      var touches = evt.changedTouches;
+      function handleCancel(evt) {
+        evt.preventDefault()
 
-      ctx.lineWidth = 4;
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
 
-      for (var i=0; i<touches.length; i++) {
-        var color = colorForTouch(touches[i]);
-        var idx = ongoingTouchIndexById(touches[i].identifier);
-
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.moveTo(ongoingTouches[i].pageX, ongoingTouches[i].pageY);
-        ctx.lineTo(touches[i].pageX, touches[i].pageY);
-        ongoingTouches.splice(i, 1);  // remove it; we're done
+        for (let i = 0; i < touchesLength; i++) {
+          ongoingTouches.splice(i, 1) // remove it; we're done
+        }
       }
-    }
 
-    function handleCancel(evt) {
-      evt.preventDefault();
-      var touches = evt.changedTouches;
-
-      for (var i=0; i<touches.length; i++) {
-        ongoingTouches.splice(i, 1);  // remove it; we're done
+      function clear() {
+        context.clearRect(0, 0, canvas.width, canvas.height)
       }
-    }
 
-
-    function startup() {
-      var el = document.getElementById("canvas");
-      el.addEventListener("touchstart", handleStart, false);
-      el.addEventListener("touchend", handleEnd, false);
-      el.addEventListener("touchcancel", handleCancel, false);
-      el.addEventListener("touchleave", handleEnd, false);
-      el.addEventListener("touchmove", handleMove, false);
-    }
-  </script>
-</body>
+      function startup() {
+        canvas.addEventListener("touchstart", handleStart)
+        canvas.addEventListener("touchend", handleEnd)
+        canvas.addEventListener("touchcancel", handleCancel)
+        canvas.addEventListener("touchleave", handleEnd)
+        canvas.addEventListener("touchmove", handleMove)
+        clearButton.addEventListener("touchstart", clear)
+      }
+    </script>
+  </body>
 </html>
