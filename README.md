@@ -1,15 +1,17 @@
-# Caress Client#
+# Caress Client
 
-*Caress Client* is a JavaScript library that converts [TUIO](http://www.tuio.org) events to native browser touches as proposed by the [W3C Touch Events version 2](http://dvcs.w3.org/hg/webevents/raw-file/tip/touchevents.html).
+_Caress Client_ is a JavaScript library that converts [TUIO](http://www.tuio.org) events to native browser touches as proposed by the [W3C Touch Events version 2](http://dvcs.w3.org/hg/webevents/raw-file/tip/touchevents.html).
 
-### Background ###
+### Background
+
 Thus far touch events have mainly only been supported on some mobile browsers. Firefox (as of version 4) is an exception in the desktop department and supports a mode where you can enable touch support (however it is a bit of a secret). Chrome's emulation of touch support, frankly just doesn't work.
 
-For most of us this doesn't really cut it. I want multi-touch support on my desktop dammit! And across all browsers! This is what the aim of this library is. Using Caress Client + [Caress Server](https://github.com/ekryski/caress-server/) + some hardware that spits out TUIO, you too can have multi-touch support in your browser!
+For most of us this doesn't really cut it. I want multi-touch support on my desktop dammit! And across all browsers! This is what the aim of this library is. Using Caress Client + [Caress Server](https://github.com/MadDeveloper/caress-client) + some hardware that spits out TUIO, you too can have multi-touch support in your browser!
 
 ## Getting Started
 
 ### Client
+
 You need to include a few client side libraries in your html file. They are:
 
     <script type="text/javascript" src="socket.io-0.9.10.min.js"></script>
@@ -18,41 +20,45 @@ You need to include a few client side libraries in your html file. They are:
 Then just add the code below and start binding regular touch events at will:
 
     <script>
-      $(function() {
-          window.client = new Caress.Client({
-              host: 'localhost',
-              port: 5000
-          });
-          client.connect();
-      });
+        const client = new Caress.Client({
+            host: 'localhost',
+            port: 5000
+        });
+        client.connect();
     </script>
 
 ### Server
-Grab the [Caress Server](https://github.com/ekryski/caress-server/) and follow the instructions on the README.
+
+d
+Grab the [Caress Server](https://github.com/MadDeveloper/caress-client) and follow the instructions on the README.
 
 ## Examples
-* Option A: _See the [examples](https://github.com/ekryski/Caress/tree/master/examples) folder_
-* Option B:
-    * Download or clone the repo
-    * `cd caress-client`
-    * `npm install`
-    * `npm start`
-    * Go to `http://localhost:5000/`
-    * Start up your TUIO device with port 3333 and play with the examples!
+
+- Option A: _See the [examples](https://github.com/MadDeveloper/caress-client/tree/master/examples) folder_
+- Option B:
+  - Download or clone the repo
+  - `cd caress-client`
+  - `npm install`
+  - `npm start`
+  - Go to `http://localhost:5000/`
+  - Start up your TUIO device with port 3333 and play with the examples!
 
 ## Contributing
+
 I am open to pull requests but make sure you include unit tests with your code.
 
 ## Credits
+
 Although I did not collaborate with these individuals their work inspired me to create this project:
 
-* Boris Smus (https://github.com/borismus/MagicTouch)
-* Fajran Iman Rusadi (https://github.com/fajran/npTuioClient)
-* Andy Smith (https://github.com/termie/node-osc)
-* fe9lix (https://github.com/fe9lix/Tuio.js)
-* Esteban Ginez (https://github.com/eginez/MultitouchWebSockets)
+- Boris Smus (https://github.com/borismus/MagicTouch)
+- Fajran Iman Rusadi (https://github.com/fajran/npTuioClient)
+- Andy Smith (https://github.com/termie/node-osc)
+- fe9lix (https://github.com/fe9lix/Tuio.js)
+- Esteban Ginez (https://github.com/eginez/MultitouchWebSockets)
 
 ## MIT Licensed
+
 Copyright 2012 Eric Kryski
 
 Permission is hereby granted, free of charge, to any person obtaining

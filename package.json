@@ -4,36 +4,30 @@
   "version": "0.1.1",
   "homepage": "https://github.com/ekryski/caress-client",
   "author": {
-    "name": "Eric Kryski",
-    "email": "e.kryski@gmail.com"
+    "name": "Julien Sergent",
+    "email": "sergent.julien@icloud.com"
   },
   "contributors": [
     {
       "name": "David Lueke"
-    }
-  ],
-  "licenses": [
+    },
     {
-      "type": "MIT",
-      "url": "http://opensource.org/licenses/MIT"
+      "name": "Eric Kryski",
+      "email": "e.kryski@gmail.com"
     }
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ekryski/caress-client.git"
+    "url": "https://github.com/MadDeveloper/caress-client.git"
   },
   "bugs": {
-    "url": "https://github.com/ekryski/caress-client/issues"
+    "url": "https://github.com/MadDeveloper/caress-client/issues"
   },
   "dependencies": {
+    "caress-server": "git+https://github.com/MadDeveloper/caress-server.git#v3.0.0",
     "express": ">=3.0",
-    "socket.io": ">=0.8",
-    "caress-server": ">=0.1.1"
-  },
-  "devDependencies": {
-    "grunt": "*",
-    "mocha": "*",
-    "grunt-mocha": "*"
+    "socket.io-client": "^2.3.0"
   },
   "keywords": [
     "tuio",
