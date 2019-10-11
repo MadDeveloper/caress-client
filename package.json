@@ -2,7 +2,7 @@
   "name": "caress-client",
   "description": "caress-client is a JavaScript library that converts TUIO events to W3C compliant browser touch events",
   "version": "0.1.1",
-  "homepage": "https://github.com/ekryski/caress-client",
+  "homepage": "https://github.com/MadDeveloper/caress-server",
   "author": {
     "name": "Julien Sergent",
     "email": "sergent.julien@icloud.com"
