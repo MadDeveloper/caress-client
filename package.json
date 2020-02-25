@@ -36,7 +36,7 @@
     "multitouch",
     "eventemitter"
   ],
-  "main": "lib/caress.js",
+  "main": "lib/Caress.js",
   "scripts": {
     "start": "hs examples"
   },
